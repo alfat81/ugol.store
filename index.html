@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Угол чемпионов</title>
+  <style>
+    :root {
+      --bg: #000000;
+      --surface: #121212;
+      --text: #ffffff;
+      --gold: #d4af37;
+      --gray: #aaa;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+    }
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    header {
+      background-color: var(--surface);
+      padding: 1.5rem 0;
+      border-bottom: 1px solid #333;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .logo svg {
+      height: 50px;
+    }
+    .logo h1 {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: var(--gold);
+    }
+    .contacts {
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+    }
+    .contacts a {
+      color: var(--text);
+      text-decoration: none;
+    }
+    .filters {
+      display: flex;
+      gap: 1rem;
+      margin: 1.5rem 0;
+      flex-wrap: wrap;
+    }
+    .filters select {
+      padding: 0.5rem;
+      background: #1e1e1e;
+      color: white;
+      border: 1px solid #444;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    .product-card {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 1rem;
+      transition: transform 0.2s;
+    }
+    .product-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-4px);
+    }
+    .product-title {
+      font-size: 1.1rem;
+      margin: 0.5rem 0;
+    }
+    .product-meta {
+      font-size: 0.9rem;
+      color: var(--gray);
+      margin: 0.3rem 0;
+    }
+    .product-price {
+      font-weight: bold;
+      color: var(--gold);
+      font-size: 1.2rem;
+      margin: 0.5rem 0;
+    }
+    .availability.in-stock { color: #4caf50; }
+    .availability.out-of-stock { color: #e63946; }
+    .availability.coming-soon { color: #ff9800; }
+    footer {
+      background: var(--surface);
+      padding: 2rem 0;
+      margin-top: 3rem;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #ccc;
+      border-top: 1px solid #333;
+    }
+  </style>
+</head>
+<body>
+
+<header class="container">
+  <div class="logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+      <rect x="10" y="10" width="80" height="80" fill="none" stroke="gold" stroke-width="4"/>
+      <line x1="10" y1="10" x2="40" y2="10" stroke="gold" stroke-width="4"/>
+      <line x1="60" y1="10" x2="90" y2="10" stroke="gold" stroke-width="4"/>
+      <line x1="10" y1="90" x2="40" y2="90" stroke="gold" stroke-width="4"/>
+      <line x1="60" y1="90" x2="90" y2="90" stroke="gold" stroke-width="4"/>
+      <line x1="10" y1="10" x2="10" y2="40" stroke="gold" stroke-width="4"/>
+      <line x1="10" y1="60" x2="10" y2="90" stroke="gold" stroke-width="4"/>
+      <line x1="90" y1="10" x2="90" y2="40" stroke="gold" stroke-width="4"/>
+      <line x1="90" y1="60" x2="90" y2="90" stroke="gold" stroke-width="4"/>
+    </svg>
+    <h1>Угол чемпионов</h1>
+  </div>
+  <div class="contacts">
+    📞 <a href="tel:+79696002585">+7 (969) 600-25-85</a> |
+    ✉️ <a href="mailto:ugol-chemp@yandex.ru">ugol-chemp@yandex.ru</a>
+  </div>
+</header>
+
+<main class="container">
+  <div class="filters">
+    <select id="brandFilter">
+      <option value="">Все бренды</option>
+      <option value="CLINCH">CLINCH</option>
+      <option value="adidas">adidas</option>
+    </select>
+    <select id="categoryFilter">
+      <option value="">Все категории</option>
+    </select>
+    <select id="availabilityFilter">
+      <option value="">Любое наличие</option>
+      <option value="В наличии">В наличии</option>
+      <option value="временно нет в наличии">Нет в наличии</option>
+      <option value="ПОСТУПЛЕНИЕ В ДЕКАБРЕ">Поступление в декабре</option>
+      <option value="ПОСТУПЛЕНИЕ В КОНЦЕ ДЕКАБРЯ">Поступление в конце декабря</option>
+      <option value="В НАЛИЧИИ НОВОЕ ПОСТУПЛЕНИЕ">Новое поступление</option>
+    </select>
+  </div>
+
+  <div id="productGrid" class="product-grid">
+    Загрузка каталога...
+  </div>
+</main>
+
+<footer class="container">
+  © 2025 «Угол чемпионов» — экипировка для бокса и единоборств
+</footer>
+
+<script>
+// === КОНСТАНТЫ ===
+const CATEGORIES = {
+  перчатки: 'Перчатки',
+  шлем: 'Шлемы',
+  защит: 'Защита',
+  лапы: 'Лапы и палки',
+  бинт: 'Бинты и тейпы',
+  обув: 'Обувь',
+  кимоно: 'Кимоно и одежда',
+  форма: 'Кимоно и одежда',
+  трико: 'Кимоно и одежда',
+  майка: 'Кимоно и одежда',
+  шорты: 'Кимоно и одежда',
+  пояс: 'Пояса',
+  кап: 'Защита',
+  мешок: 'Мешки и груши',
+  груша: 'Мешки и груши',
+  скакалк: 'Скакалки'
+};
+
+function getCategory(desc) {
+  const d = (desc || '').toLowerCase();
+  for (const [key, cat] of Object.entries(CATEGORIES)) {
+    if (d.includes(key)) return cat;
+  }
+  return 'Разное';
+}
+
+// === ДАННЫЕ (сокращённый пример — вы можете заменить products.json позже) ===
+const PRODUCTS = [
+  {
+    sku: "C161RT",
+    brand: "CLINCH",
+    name: "Боксерские перчатки тренировочные",
+    description: "СБОРНАЯ РОССИИ Undefeated Russian Team",
+    color: "серебристый",
+    size: "10 унций",
+    price: 12990,
+    availability: "В наличии"
+  },
+  {
+    sku: "adiBP05",
+    brand: "adidas",
+    name: "Профессиональная боксёрская защита паха",
+    description: "Защитный слой Evomax, гель. Двойная застёжка на липучке.",
+    color: "чёрный",
+    size: "S",
+    price: 4990,
+    availability: "В наличии"
+  }
+];
+
+// === ФУНКЦИИ ===
+function renderProducts(list = PRODUCTS) {
+  const grid = document.getElementById('productGrid');
+  if (list.length === 0) {
+    grid.innerHTML = '<p>Товары не найдены</p>';
+    return;
+  }
+
+  // Собираем категории
+  const categories = new Set(list.map(p => getCategory(p.description)));
+
+  // Обновляем фильтр категорий
+  const catSel = document.getElementById('categoryFilter');
+  catSel.innerHTML = '<option value="">Все категории</option>';
+  [...categories].sort().forEach(cat => {
+    const opt = document.createElement('option');
+    opt.value = cat;
+    opt.textContent = cat;
+    catSel.appendChild(opt);
+  });
+
+  // Рендер карточек
+  grid.innerHTML = list.map(p => {
+    const cat = getCategory(p.description);
+    return `
+      <div class="product-card">
+        <div class="product-brand">${p.brand}</div>
+        <div class="product-title">${p.name}</div>
+        <div class="product-meta">${p.description}</div>
+        <div class="product-meta">Цвет: ${p.color} • Размер: ${p.size}</div>
+        <div class="product-price">${p.price.toLocaleString('ru-RU')} ₽</div>
+        <div class="availability ${getAvClass(p.availability)}">${p.availability}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function getAvClass(av) {
+  if (av.includes('В наличии')) return 'in-stock';
+  if (av.includes('ПОСТУПЛЕНИЕ')) return 'coming-soon';
+  return 'out-of-stock';
+}
+
+function applyFilters() {
+  const brand = document.getElementById('brandFilter').value;
+  const category = document.getElementById('categoryFilter').value;
+  const availability = document.getElementById('availabilityFilter').value;
+
+  const filtered = PRODUCTS.filter(p =>
+    (brand === '' || p.brand === brand) &&
+    (category === '' || getCategory(p.description) === category) &&
+    (availability === '' || p.availability.includes(availability))
+  );
+
+  renderProducts(filtered);
+}
+
+// === ИНИЦИАЛИЗАЦИЯ ===
+document.addEventListener('DOMContentLoaded', () => {
+  renderProducts();
+  document.getElementById('brandFilter').addEventListener('change', applyFilters);
+  document.getElementById('categoryFilter').addEventListener('change', applyFilters);
+  document.getElementById('availabilityFilter').addEventListener('change', applyFilters);
+});
+</script>
+
+</body>
+</html>
