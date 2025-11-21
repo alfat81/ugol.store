@@ -1,0 +1,137 @@
+:root {
+  --bg: #000000;
+  --surface: #121212;
+  --text: #ffffff;
+  --gold: #d4af37;
+  --red: #e63946;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+header {
+  background-color: var(--surface);
+  padding: 1.5rem 0;
+  border-bottom: 1px solid #333;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo img {
+  height: 50px;
+}
+
+.logo h1 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--gold);
+}
+
+.contacts a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.contacts a:hover {
+  color: var(--gold);
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+
+.filters select {
+  padding: 0.5rem;
+  background: #1e1e1e;
+  color: white;
+  border: 1px solid #444;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.product-card {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 1rem;
+  transition: transform 0.2s;
+}
+
+.product-card:hover {
+  border-color: var(--gold);
+  transform: translateY(-4px);
+}
+
+.product-icon {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 1rem;
+}
+
+.product-title {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.product-meta {
+  font-size: 0.9rem;
+  color: #aaa;
+  margin: 0.3rem 0;
+}
+
+.product-price {
+  font-weight: bold;
+  color: var(--gold);
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
+}
+
+.availability.in-stock { color: #4caf50; }
+.availability.out-of-stock { color: var(--red); }
+.availability.coming-soon { color: #ff9800; }
+
+footer {
+  background: var(--surface);
+  padding: 2rem 0;
+  margin-top: 3rem;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #ccc;
+  border-top: 1px solid #333;
+}
+
+footer a {
+  color: var(--gold);
+  text-decoration: none;
+}
