@@ -38,7 +38,7 @@ header {
   align-items: center;
   gap: 1rem;
 }
-.logo svg {
+.default png {
   height: 50px;
 }
 .logo h1 {
@@ -132,3 +132,4 @@ footer {
   color: #ccc;
   border-top: 1px solid #333;
 }
+
