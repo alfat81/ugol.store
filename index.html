@@ -168,122 +168,121 @@
 </footer>
 
 <script>
-// === КОНСТАНТЫ ===
-const CATEGORIES = {
-  перчатки: 'Перчатки',
-  шлем: 'Шлемы',
-  защит: 'Защита',
-  лапы: 'Лапы и палки',
-  бинт: 'Бинты и тейпы',
-  обув: 'Обувь',
-  кимоно: 'Кимоно и одежда',
-  форма: 'Кимоно и одежда',
-  трико: 'Кимоно и одежда',
-  майка: 'Кимоно и одежда',
-  шорты: 'Кимоно и одежда',
-  пояс: 'Пояса',
-  кап: 'Защита',
-  мешок: 'Мешки и груши',
-  груша: 'Мешки и груши',
-  скакалк: 'Скакалки'
-};
+  // Подгрузка товаров из JSON
+  let allProducts = [];
 
-function getCategory(desc) {
-  const d = (desc || '').toLowerCase();
-  for (const [key, cat] of Object.entries(CATEGORIES)) {
-    if (d.includes(key)) return cat;
-  }
-  return 'Разное';
-}
+  // Определяем категории по описанию
+  const CATEGORIES = {
+    перчатки: 'Перчатки',
+    шлем: 'Шлемы',
+    защит: 'Защита',
+    лапы: 'Лапы и палки',
+    бинт: 'Бинты и тейпы',
+    обув: 'Обувь',
+    кимоно: 'Кимоно и одежда',
+    форма: 'Кимоно и одежда',
+    трико: 'Кимоно и одежда',
+    майка: 'Кимоно и одежда',
+    шорты: 'Кимоно и одежда',
+    пояс: 'Пояса',
+    кап: 'Защита',
+    мешок: 'Мешки и груши',
+    груша: 'Мешки и груши',
+    скакалк: 'Скакалки'
+  };
 
-// === ДАННЫЕ (сокращённый пример — вы можете заменить products.json позже) ===
-const PRODUCTS = [
-  {
-    sku: "C161RT",
-    brand: "CLINCH",
-    name: "Боксерские перчатки тренировочные",
-    description: "СБОРНАЯ РОССИИ Undefeated Russian Team",
-    color: "серебристый",
-    size: "10 унций",
-    price: 12990,
-    availability: "В наличии"
-  },
-  {
-    sku: "adiBP05",
-    brand: "adidas",
-    name: "Профессиональная боксёрская защита паха",
-    description: "Защитный слой Evomax, гель. Двойная застёжка на липучке.",
-    color: "чёрный",
-    size: "S",
-    price: 4990,
-    availability: "В наличии"
-  }
-];
-
-// === ФУНКЦИИ ===
-function renderProducts(list = PRODUCTS) {
-  const grid = document.getElementById('productGrid');
-  if (list.length === 0) {
-    grid.innerHTML = '<p>Товары не найдены</p>';
-    return;
+  function getCategory(desc) {
+    const d = (desc || '').toLowerCase();
+    for (const [key, cat] of Object.entries(CATEGORIES)) {
+      if (d.includes(key)) return cat;
+    }
+    return 'Разное';
   }
 
-  // Собираем категории
-  const categories = new Set(list.map(p => getCategory(p.description)));
+  function renderProducts(list = allProducts) {
+    const grid = document.getElementById('productGrid');
+    if (list.length === 0) {
+      grid.innerHTML = '<p>Товары не найдены</p>';
+      return;
+    }
 
-  // Обновляем фильтр категорий
-  const catSel = document.getElementById('categoryFilter');
-  catSel.innerHTML = '<option value="">Все категории</option>';
-  [...categories].sort().forEach(cat => {
-    const opt = document.createElement('option');
-    opt.value = cat;
-    opt.textContent = cat;
-    catSel.appendChild(opt);
+    // Собираем категории
+    const categories = new Set(list.map(p => getCategory(p.description)));
+
+    // Обновляем фильтр категорий
+    const catSel = document.getElementById('categoryFilter');
+    catSel.innerHTML = '<option value="">Все категории</option>';
+    [...categories].sort().forEach(cat => {
+      const opt = document.createElement('option');
+      opt.value = cat;
+      opt.textContent = cat;
+      catSel.appendChild(opt);
+    });
+
+    // Рендер карточек
+    grid.innerHTML = list.map(p => {
+      const cat = getCategory(p.description);
+      return `
+        <div class="product-card">
+          <div class="product-brand">${p.brand || ''}</div>
+          <div class="product-title">${p.name}</div>
+          <div class="product-meta">${p.description}</div>
+          <div class="product-meta">Цвет: ${p.color || '—'} • Размер: ${p.size || '—'}</div>
+          <div class="product-price">${(p.price || 0).toLocaleString('ru-RU')} ₽</div>
+          <div class="availability ${getAvClass(p.availability)}">${p.availability || '—'}</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function getAvClass(av) {
+    if (!av) return '';
+    if (av.includes('В наличии')) return 'in-stock';
+    if (av.includes('ПОСТУПЛЕНИЕ')) return 'coming-soon';
+    return 'out-of-stock';
+  }
+
+  function applyFilters() {
+    const brand = document.getElementById('brandFilter').value;
+    const category = document.getElementById('categoryFilter').value;
+    const availability = document.getElementById('availabilityFilter').value;
+
+    const filtered = allProducts.filter(p =>
+      (brand === '' || (p.brand || '').includes(brand)) &&
+      (category === '' || getCategory(p.description) === category) &&
+      (availability === '' || (p.availability || '').includes(availability))
+    );
+
+    renderProducts(filtered);
+  }
+
+  // Загрузка JSON и инициализация
+  fetch('products.json')
+    .then(response => {
+      if (!response.ok) throw new Error('Не удалось загрузить products.json');
+      return response.json();
+    })
+    .then(products => {
+      // Добавляем поле name, если его нет
+      allProducts = products.map(p => ({
+        ...p,
+        name: p.name || p.description?.split('.')[0] || 'Товар без названия'
+      }));
+      renderProducts();
+    })
+    .catch(err => {
+      console.error('Ошибка загрузки каталога:', err);
+      document.getElementById('productGrid').innerHTML = `
+        <p style="color: red;">❌ Ошибка загрузки товаров. Убедитесь, что файл <code>products.json</code> лежит в корне сайта.</p>
+      `;
+    });
+
+  // Обработчики фильтров
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('brandFilter').addEventListener('change', applyFilters);
+    document.getElementById('categoryFilter').addEventListener('change', applyFilters);
+    document.getElementById('availabilityFilter').addEventListener('change', applyFilters);
   });
-
-  // Рендер карточек
-  grid.innerHTML = list.map(p => {
-    const cat = getCategory(p.description);
-    return `
-      <div class="product-card">
-        <div class="product-brand">${p.brand}</div>
-        <div class="product-title">${p.name}</div>
-        <div class="product-meta">${p.description}</div>
-        <div class="product-meta">Цвет: ${p.color} • Размер: ${p.size}</div>
-        <div class="product-price">${p.price.toLocaleString('ru-RU')} ₽</div>
-        <div class="availability ${getAvClass(p.availability)}">${p.availability}</div>
-      </div>
-    `;
-  }).join('');
-}
-
-function getAvClass(av) {
-  if (av.includes('В наличии')) return 'in-stock';
-  if (av.includes('ПОСТУПЛЕНИЕ')) return 'coming-soon';
-  return 'out-of-stock';
-}
-
-function applyFilters() {
-  const brand = document.getElementById('brandFilter').value;
-  const category = document.getElementById('categoryFilter').value;
-  const availability = document.getElementById('availabilityFilter').value;
-
-  const filtered = PRODUCTS.filter(p =>
-    (brand === '' || p.brand === brand) &&
-    (category === '' || getCategory(p.description) === category) &&
-    (availability === '' || p.availability.includes(availability))
-  );
-
-  renderProducts(filtered);
-}
-
-// === ИНИЦИАЛИЗАЦИЯ ===
-document.addEventListener('DOMContentLoaded', () => {
-  renderProducts();
-  document.getElementById('brandFilter').addEventListener('change', applyFilters);
-  document.getElementById('categoryFilter').addEventListener('change', applyFilters);
-  document.getElementById('availabilityFilter').addEventListener('change', applyFilters);
-});
 </script>
 
 </body>
