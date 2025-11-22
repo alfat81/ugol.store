@@ -36,15 +36,23 @@ header {
 .logo {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
+  text-align: center;
 }
-.logo svg {
+.logo img {
   height: 50px;
 }
 .logo h1 {
   font-size: 1.8rem;
   font-weight: bold;
   color: var(--gold);
+  margin: 0;  
+}
+.tagline {
+  font-size: 0.95rem;
+  color: #aaa;
+  margin: 0.3rem 0 0;
+  font-style: italic;
 }
 .contacts {
   margin-top: 0.5rem;
@@ -132,5 +140,6 @@ footer {
   color: #ccc;
   border-top: 1px solid #333;
 }
+
 
 
