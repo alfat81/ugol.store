@@ -130,6 +130,16 @@ header {
   font-size: 1.2rem;
   margin: 0.5rem 0;
 }
+.old-price {
+  text-decoration: line-through;
+  color: #aaa;
+  font-size: 1rem;
+}
+.new-price {
+  color: var(--gold);
+  font-weight: bold;
+  font-size: 1.2rem;
+}
 .availability {
   font-size: 0.9rem;
   margin-top: 0.5rem;
@@ -148,6 +158,7 @@ footer {
   color: #ccc;
   border-top: 1px solid #333;
 }
+
 
 
 
