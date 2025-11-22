@@ -168,6 +168,24 @@
       <option value="ПОСТУПЛЕНИЕ В КОНЦЕ ДЕКАБРЯ">Поступление в конце декабря</option>
       <option value="В НАЛИЧИИ НОВОЕ ПОСТУПЛЕНИЕ">Новое поступление</option>
     </select>
+    <select id="weightFilter">
+  <option value="">Все веса</option>
+  <option value="10 унций">10 унций</option>
+  <option value="12 унций">12 унций</option>
+  <option value="14 унций">14 унций</option>
+  <option value="16 унций">16 унций</option>
+  <option value="18 унций">18 унций</option>
+</select>
+
+<select id="helmetSizeFilter">
+  <option value="">Все размеры шлемов</option>
+  <option value="S">S</option>
+  <option value="M">M</option>
+  <option value="L">L</option>
+  <option value="XL">XL</option>
+  <option value="S/M">S/M</option>
+  <option value="L/XL">L/XL</option>
+</select>
   </div>
 
   <div id="productGrid" class="product-grid">
@@ -267,6 +285,18 @@
     );
 
     renderProducts(filtered);
+    const imgPath = p.sku ? `assets/images/${p.sku}.png` : 'assets/icons/default.svg';
+const card = `
+  <div class="product-card">
+    <img src="${imgPath}" alt="${p.name}" class="product-img" onerror="this.src='assets/icons/default.svg'">
+    <div class="product-brand">${p.brand || ''}</div>
+    <div class="product-title">${p.name}</div>
+    <div class="product-meta">${p.description}</div>
+    <div class="product-meta">Цвет: ${p.color || '—'} • Размер: ${p.size || '—'}</div>
+    <div class="product-price">${(p.price || 0).toLocaleString('ru-RU')} ₽</div>
+    <div class="availability ${getAvClass(p.availability)}">${p.availability || '—'}</div>
+  </div>
+`;
   }
 
   // === СБРОС ФИЛЬТРОВ ===
