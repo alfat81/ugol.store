@@ -8,7 +8,8 @@
     "size": "10 унций",
     "price": 12990,
     "availability": "В наличии",
-    "category": "Перчатки"
+    "category": "Перчатки",
+    "weight": "10 унций"
   },
   {
     "sku": "C161RT",
@@ -19,7 +20,8 @@
     "size": "12 унций",
     "price": 12990,
     "availability": "временно нет в наличии",
-    "category": "Перчатки"
+    "category": "Перчатки",
+    "weight": "12 унций"
   },
   {
     "sku": "C161RT",
@@ -30,7 +32,8 @@
     "size": "14 унций",
     "price": 12990,
     "availability": "временно нет в наличии",
-    "category": "Перчатки"
+    "category": "Перчатки",
+    "weight": "14 унций"
   },
   {
     "sku": "C161RT",
@@ -41,7 +44,8 @@
     "size": "16 унций",
     "price": 12990,
     "availability": "временно нет в наличии",
-    "category": "Перчатки"
+    "category": "Перчатки",
+    "weight": "16 унций"
   },
   {
     "sku": "C161RT",
@@ -52,7 +56,8 @@
     "size": "18 унций",
     "price": 12990,
     "availability": "временно нет в наличии",
-    "category": "Перчатки"
+    "category": "Перчатки",
+    "weight": "18 унций"
   },
   {
     "sku": "C162RT",
@@ -63,7 +68,8 @@
     "size": "S",
     "price": 11990,
     "availability": "В наличии",
-    "category": "Шлемы"
+    "category": "Шлемы",
+    "size_category": "S"
   },
   {
     "sku": "C162RT",
@@ -74,7 +80,8 @@
     "size": "M",
     "price": 11990,
     "availability": "временно нет в наличии",
-    "category": "Шлемы"
+    "category": "Шлемы",
+    "size_category": "M"
   },
   {
     "sku": "C162",
@@ -85,7 +92,8 @@
     "size": "S",
     "price": 11990,
     "availability": "В наличии",
-    "category": "Шлемы"
+    "category": "Шлемы",
+    "size_category": "S"
   },
   {
     "sku": "C162",
@@ -96,193 +104,11 @@
     "size": "XL",
     "price": 11990,
     "availability": "В наличии",
-    "category": "Шлемы"
+    "category": "Шлемы",
+    "size_category": "XL"
   },
   {
     "sku": "C240",
     "brand": "CLINCH",
     "name": "Бинты боксерские",
-    "description": "Clinch Boxing Hand Wrap UNDEFEATED, из мягкой хлопчато-бумажной трикотажной ленты. Материал: 55% хлопок, 45% нейлон с фиксатором на липчке. Упакованы в картонную коробку.",
-    "color": "белый",
-    "size": "2,55 м",
-    "price": 1690,
-    "availability": "В НАЛИЧИИ НОВОЕ ПОСТУПЛЕНИЕ",
-    "category": "Бинты и тейпы"
-  },
-  {
-    "sku": "C160RT",
-    "brand": "CLINCH",
-    "name": "Боксерский шлем с бампером",
-    "description": "СБОРНАЯ РОССИИ Undefeated Russian Team. Боксерский шлем с бампером из натуральной кожи. Внутри вкладыш из пеноматериала ЭВА. Упаковано в индивидуальную коробку.",
-    "color": "серебристый",
-    "size": "S/M",
-    "price": 12990,
-    "availability": "В наличии",
-    "category": "Шлемы"
-  },
-  {
-    "sku": "C160",
-    "brand": "CLINCH",
-    "name": "Боксерский шлем с бампером",
-    "description": "Undefeated. Боксерский шлем с бампером из натуральной кожи. Внутри вкладыш из пеноматериала ЭВА. Упаковано в индивидуальную коробку.",
-    "color": "черный",
-    "size": "L/XL",
-    "price": 12990,
-    "availability": "В наличии",
-    "category": "Шлемы"
-  },
-  {
-    "sku": "C555",
-    "brand": "CLINCH",
-    "name": "Кимоно для дзюдо белое",
-    "description": "Без пояса. Рекомендовано Федерацией дзюдо России. Модель: Red FDR. Плотность куртки 450 г/м2. Материал: 60%хлопок, 40% полиэстер",
-    "color": "белый",
-    "size": "130",
-    "price": 7990,
-    "availability": "временно нет в наличии",
-    "category": "Кимоно и одежда"
-  },
-  {
-    "sku": "adiBP12",
-    "brand": "adidas",
-    "name": "Защита груди женская",
-    "description": "Lady Breast Protector для единоборств. Материал: полиэстер, лайкра. Раздельные чашки из пластика",
-    "color": "белый",
-    "size": "XS",
-    "price": 5490,
-    "availability": "В наличии",
-    "category": "Защита"
-  },
-  {
-    "sku": "adiTS01",
-    "brand": "adidas",
-    "name": "Добок для тхэквондо",
-    "description": "Adi-start. Белый с красно-черным воротником, без пояса. Материал: 100% полиэстер",
-    "color": "белый с черно-красным воротником",
-    "size": "100",
-    "price": 4990,
-    "availability": "В наличии",
-    "category": "Кимоно и одежда"
-  },
-  {
-    "sku": "adiBP05",
-    "brand": "adidas",
-    "name": "Профессиональная боксёрская защита паха",
-    "description": "Защитный слой Evomax, гель. Двойная застёжка на липучке. Материал: полиуретан.",
-    "color": "чёрный",
-    "size": "S",
-    "price": 4990,
-    "availability": "В наличии",
-    "category": "Защита"
-  },
-  {
-    "sku": "adiBP05",
-    "brand": "adidas",
-    "name": "Профессиональная боксёрская защита паха",
-    "description": "Защитный слой Evomax, гель. Двойная застёжка на липучке. Материал: полиуретан.",
-    "color": "чёрный",
-    "size": "XL",
-    "price": 4990,
-    "availability": "временно нет в наличии",
-    "category": "Защита"
-  },
-  {
-    "sku": "C112",
-    "brand": "CLINCH",
-    "name": "Соревновательный боксерский шлем",
-    "description": "Clinch Olimp. Официальный лицензионный шлем Федерации Бокса России. Изготовлен из высококачественного эластичного полиуретана.",
-    "color": "красный",
-    "size": "S",
-    "price": 4590,
-    "availability": "В НАЛИЧИИ НОВОЕ ПОСТУПЛЕНИЕ",
-    "category": "Шлемы"
-  },
-  {
-    "sku": "C511",
-    "brand": "CLINCH",
-    "name": "Капа одночелюстная",
-    "description": "Competition Single Layer. Однослойная капа из ЭВА с пластиковой коробочкой.",
-    "color": "белый",
-    "size": "Senior",
-    "price": 990,
-    "availability": "В наличии",
-    "category": "Защита"
-  },
-  {
-    "sku": "C152",
-    "brand": "CLINCH",
-    "name": "Боксерские перчатки",
-    "description": "CLINCH PRIME 2.0. Ударная часть — натуральная кожа. Ладонь и манжета — полиуретан.",
-    "color": "черно-бронзовый",
-    "size": "10oz",
-    "price": 7990,
-    "availability": "В наличии",
-    "category": "Перчатки"
-  },
-  {
-    "sku": "С418",
-    "brand": "CLINCH",
-    "name": "Боксерки",
-    "description": "Clinch Punch 3.0. Материал верха: текстиль, полиуретан. Подошва: резина, ЭВА.",
-    "color": "черно-серебристо-сине-красный",
-    "size": "37",
-    "price": 7990,
-    "availability": "В наличии",
-    "category": "Обувь"
-  },
-  {
-    "sku": "С422",
-    "brand": "CLINCH",
-    "name": "Боксерки TRAINING",
-    "description": "Специальная модель для тренировок, на толстой подошве. Материал верха: 60% текстиль, 40% полиуретан.",
-    "color": "черно-белый",
-    "size": "44",
-    "price": 8990,
-    "availability": "В наличии",
-    "category": "Обувь"
-  },
-  {
-    "sku": "C115",
-    "brand": "CLINCH",
-    "name": "Комплект боксерской формы",
-    "description": "Clinch Competition. Одобрен Федерацией бокса России. Включает майку и шорты. Материал: 100% полиэстер.",
-    "color": "красный",
-    "size": "128",
-    "price": 3990,
-    "availability": "В наличии",
-    "category": "Кимоно и одежда"
-  },
-  {
-    "sku": "C611",
-    "brand": "CLINCH",
-    "name": "Перчатки для ММА",
-    "description": "CLINCH COMBAT. Для смешанных единоборств.",
-    "color": "черно-белый",
-    "size": "S/M",
-    "price": 3390,
-    "availability": "В наличии",
-    "category": "Перчатки"
-  },
-  {
-    "sku": "adiTKK01",
-    "brand": "adidas",
-    "name": "Степки для тхэквондо",
-    "description": "Adi-Kick 2 бело-черные",
-    "color": "бело-черный",
-    "size": "39 RU [7 UK]",
-    "price": 7990,
-    "availability": "В наличии",
-    "category": "Обувь"
-  },
-  {
-    "sku": "adiTSS03",
-    "brand": "adidas",
-    "name": "Степки для единоборств",
-    "description": "Adi-Sm III. Высокотехнологичные степки из синтетической кожи Micro Viver.",
-    "color": "бело-черный",
-    "size": "39 RU [7 UK]",
-    "price": 12990,
-    "availability": "В наличии",
-    "category": "Обувь"
-  }
-  ]
+    "description": "Clinch Boxing Hand Wrap UNDEFEATED, из мягкой хлоп
