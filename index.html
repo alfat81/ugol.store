@@ -184,7 +184,7 @@
 </footer>
 
 <script>
-  // === ОПРЕДЕЛЕНИЕ КАТЕГОРИЙ ПО ОПИСАНИЮ ===
+  // === КАТЕГОРИИ ===
   const CATEGORIES = {
     перчатки: 'Перчатки',
     шлем: 'Шлемы',
@@ -212,10 +212,9 @@
     return 'Разное';
   }
 
-  // === ГЛОБАЛЬНЫЙ МАССИВ ТОВАРОВ ===
   let allProducts = [];
 
-  // === ОТОБРАЖЕНИЕ ТОВАРОВ ===
+  // === ОТОБРАЖЕНИЕ ===
   function renderProducts(list = allProducts) {
     const grid = document.getElementById('productGrid');
     if (list.length === 0) {
@@ -223,10 +222,7 @@
       return;
     }
 
-    // Собираем категории
     const categories = new Set(list.map(p => getCategory(p.description)));
-
-    // Обновляем фильтр категорий
     const catSel = document.getElementById('categoryFilter');
     catSel.innerHTML = '<option value="">Все категории</option>';
     [...categories].sort().forEach(cat => {
@@ -236,7 +232,6 @@
       catSel.appendChild(opt);
     });
 
-    // Рендер карточек
     grid.innerHTML = list.map(p => {
       const cat = getCategory(p.description);
       return `
@@ -274,26 +269,27 @@
     renderProducts(filtered);
   }
 
+  // === СБРОС ФИЛЬТРОВ ===
+  function resetFilters() {
+    document.getElementById('brandFilter').value = '';
+    document.getElementById('categoryFilter').value = '';
+    document.getElementById('availabilityFilter').value = '';
+    renderProducts(allProducts);
+  }
+
   // === ЗАГРУЗКА JSON ===
   fetch('products.json')
-    .then(response => {
-      if (!response.ok) throw new Error('products.json не найден');
-      return response.json();
-    })
+    .then(r => r.json())
     .then(products => {
-      // Гарантируем наличие name и category
       allProducts = products.map(p => ({
         ...p,
-        name: p.name || p.description?.split('.')[0] || 'Товар',
-        category: getCategory(p.description)
+        name: p.name || p.description?.split('.')[0] || 'Товар'
       }));
-      renderProducts();
+      renderProducts(allProducts);
     })
     .catch(err => {
-      console.error('Ошибка загрузки каталога:', err);
-      document.getElementById('productGrid').innerHTML = `
-        <p style="color: red;">❌ Ошибка загрузки. Убедитесь, что файл <code>products.json</code> лежит в корне сайта.</p>
-      `;
+      console.error('Ошибка:', err);
+      document.getElementById('productGrid').innerHTML = `<p style="color:red">❌ Не удалось загрузить каталог.</p>`;
     });
 
   // === ИНИЦИАЛИЗАЦИЯ ===
@@ -301,8 +297,25 @@
     document.getElementById('brandFilter').addEventListener('change', applyFilters);
     document.getElementById('categoryFilter').addEventListener('change', applyFilters);
     document.getElementById('availabilityFilter').addEventListener('change', applyFilters);
+    
+    // Добавляем кнопку сброса (если её ещё нет)
+    if (!document.getElementById('resetFiltersBtn')) {
+      const resetBtn = document.createElement('button');
+      resetBtn.id = 'resetFiltersBtn';
+      resetBtn.textContent = 'Сбросить фильтры';
+      resetBtn.style.cssText = `
+        margin-top: 1rem;
+        padding: 0.5rem 1rem;
+        background: #d4af37;
+        color: #000;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      `;
+      resetBtn.onclick = resetFilters;
+      document.querySelector('.filters').after(resetBtn);
+    }
   });
 </script>
-
 </body>
 </html>
