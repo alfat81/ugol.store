@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>УГОЛ ЧЕМПИОНОВ</title>
+  <title>Угол чемпионов</title>
   <style>
     :root {
       --bg: #000000;
@@ -34,22 +34,31 @@
       background-color: var(--surface);
       padding: 1.5rem 0;
       border-bottom: 1px solid #333;
+      text-align: center;
     }
     .logo {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 1rem;
+      gap: 0.5rem;
     }
-    .logo svg {
+    .logo img {
       height: 50px;
     }
     .logo h1 {
       font-size: 1.8rem;
       font-weight: bold;
       color: var(--gold);
+      margin: 0;
+    }
+    .tagline {
+      font-size: 0.95rem;
+      color: #aaa;
+      margin: 0.3rem 0 0;
+      font-style: italic;
     }
     .contacts {
-      margin-top: 0.5rem;
+      margin-top: 1rem;
       font-size: 0.95rem;
     }
     .contacts a {
@@ -64,6 +73,7 @@
       gap: 1rem;
       margin: 1.5rem 0;
       flex-wrap: wrap;
+      justify-content: center;
     }
     .filters select {
       padding: 0.5rem;
@@ -73,6 +83,16 @@
       border-radius: 4px;
       font-size: 1rem;
       min-width: 160px;
+    }
+    #resetBtn {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background: var(--gold);
+      color: #000;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
     }
     .product-grid {
       display: grid;
@@ -90,6 +110,14 @@
     .product-card:hover {
       border-color: var(--gold);
       transform: translateY(-4px);
+    }
+    .product-img {
+      width: 100%;
+      height: 200px;
+      object-fit: contain;
+      background: #1a1a1a;
+      margin-bottom: 1rem;
+      border-radius: 4px;
     }
     .product-title {
       font-size: 1.1rem;
@@ -126,24 +154,13 @@
   </style>
 </head>
 <body>
-  <link rel="icon" href="assets/default.png" type="image/png">
 
 <header class="container">
   <div class="logo">
-     <img src="assets/default.png" alt="Угол чемпионов" height="250">
-      <rect x="10" y="10" width="80" height="80" fill="none" stroke="gold" stroke-width="4"/>
-      <line x1="10" y1="10" x2="40" y2="10" stroke="gold" stroke-width="4"/>
-      <line x1="60" y1="10" x2="90" y2="10" stroke="gold" stroke-width="4"/>
-      <line x1="10" y1="90" x2="40" y2="90" stroke="gold" stroke-width="4"/>
-      <line x1="60" y1="90" x2="90" y2="90" stroke="gold" stroke-width="4"/>
-      <line x1="10" y1="10" x2="10" y2="40" stroke="gold" stroke-width="4"/>
-      <line x1="10" y1="60" x2="10" y2="90" stroke="gold" stroke-width="4"/>
-      <line x1="90" y1="10" x2="90" y2="40" stroke="gold" stroke-width="4"/>
-      <line x1="90" y1="60" x2="90" y2="90" stroke="gold" stroke-width="4"/>
-    </svg>
-    <h1>УГОЛ ЧЕМПИОНОВ</h1>
-<p class="tagline">Магазин экипировки для бокса и единоборств</p>
-</div>
+    <img src="assets/default.png" alt="Угол чемпионов" height="50">
+    <h1>Угол чемпионов</h1>
+    <p class="tagline">Официальный магазин экипировки для бокса и единоборств</p>
+  </div>
   <div class="contacts">
     📞 <a href="tel:+79696002585">+7 (969) 600-25-85</a> |
     ✉️ <a href="mailto:ugol-chemp@yandex.ru">ugol-chemp@yandex.ru</a>
@@ -157,9 +174,11 @@
       <option value="CLINCH">CLINCH</option>
       <option value="adidas">adidas</option>
     </select>
+
     <select id="categoryFilter">
       <option value="">Все категории</option>
     </select>
+
     <select id="availabilityFilter">
       <option value="">Любое наличие</option>
       <option value="В наличии">В наличии</option>
@@ -168,29 +187,32 @@
       <option value="ПОСТУПЛЕНИЕ В КОНЦЕ ДЕКАБРЯ">Поступление в конце декабря</option>
       <option value="В НАЛИЧИИ НОВОЕ ПОСТУПЛЕНИЕ">Новое поступление</option>
     </select>
-    <select id="weightFilter">
-  <option value="">Все веса</option>
-  <option value="10 унций">10 унций</option>
-  <option value="12 унций">12 унций</option>
-  <option value="14 унций">14 унций</option>
-  <option value="16 унций">16 унций</option>
-  <option value="18 унций">18 унций</option>
-</select>
 
-<select id="helmetSizeFilter">
-  <option value="">Все размеры шлемов</option>
-  <option value="S">S</option>
-  <option value="M">M</option>
-  <option value="L">L</option>
-  <option value="XL">XL</option>
-  <option value="S/M">S/M</option>
-  <option value="L/XL">L/XL</option>
-</select>
+    <select id="weightFilter">
+      <option value="">Все веса перчаток</option>
+      <option value="10 унций">10 унций</option>
+      <option value="12 унций">12 унций</option>
+      <option value="14 унций">14 унций</option>
+      <option value="16 унций">16 унций</option>
+      <option value="18 унций">18 унций</option>
+    </select>
+
+    <select id="helmetSizeFilter">
+      <option value="">Все размеры шлемов</option>
+      <option value="S">S</option>
+      <option value="M">M</option>
+      <option value="L">L</option>
+      <option value="XL">XL</option>
+      <option value="S/M">S/M</option>
+      <option value="L/XL">L/XL</option>
+    </select>
   </div>
 
   <div id="productGrid" class="product-grid">
     Загрузка каталога...
   </div>
+
+  <button id="resetBtn">Сбросить фильтры</button>
 </main>
 
 <footer class="container">
@@ -202,7 +224,7 @@
 </footer>
 
 <script>
-  // === КАТЕГОРИИ ===
+  // === КАТЕГОРИИ ПО ОПИСАНИЮ ===
   const CATEGORIES = {
     перчатки: 'Перчатки',
     шлем: 'Шлемы',
@@ -232,7 +254,7 @@
 
   let allProducts = [];
 
-  // === ОТОБРАЖЕНИЕ ===
+  // === РЕНДЕР ТОВАРОВ ===
   function renderProducts(list = allProducts) {
     const grid = document.getElementById('productGrid');
     if (list.length === 0) {
@@ -241,19 +263,20 @@
     }
 
     const categories = new Set(list.map(p => getCategory(p.description)));
-    const catSel = document.getElementById('categoryFilter');
-    catSel.innerHTML = '<option value="">Все категории</option>';
+    const catSelect = document.getElementById('categoryFilter');
+    catSelect.innerHTML = '<option value="">Все категории</option>';
     [...categories].sort().forEach(cat => {
       const opt = document.createElement('option');
       opt.value = cat;
       opt.textContent = cat;
-      catSel.appendChild(opt);
+      catSelect.appendChild(opt);
     });
 
     grid.innerHTML = list.map(p => {
-      const cat = getCategory(p.description);
+      const imgPath = p.sku ? `assets/images/${p.sku}.png` : 'assets/icons/default.svg';
       return `
         <div class="product-card">
+          <img src="${imgPath}" alt="${p.name}" class="product-img" onerror="this.src='assets/icons/default.svg'">
           <div class="product-brand">${p.brand || ''}</div>
           <div class="product-title">${p.name}</div>
           <div class="product-meta">${p.description}</div>
@@ -277,26 +300,18 @@
     const brand = document.getElementById('brandFilter').value;
     const category = document.getElementById('categoryFilter').value;
     const availability = document.getElementById('availabilityFilter').value;
+    const weight = document.getElementById('weightFilter').value;
+    const helmetSize = document.getElementById('helmetSizeFilter').value;
 
     const filtered = allProducts.filter(p =>
       (brand === '' || (p.brand || '').includes(brand)) &&
       (category === '' || getCategory(p.description) === category) &&
-      (availability === '' || (p.availability || '').includes(availability))
+      (availability === '' || (p.availability || '').includes(availability)) &&
+      (weight === '' || p.weight === weight) &&
+      (helmetSize === '' || p.size_category === helmetSize)
     );
 
     renderProducts(filtered);
-    const imgPath = p.sku ? `assets/images/${p.sku}.png` : 'assets/icons/default.svg';
-const card = `
-  <div class="product-card">
-    <img src="${imgPath}" alt="${p.name}" class="product-img" onerror="this.src='assets/icons/default.svg'">
-    <div class="product-brand">${p.brand || ''}</div>
-    <div class="product-title">${p.name}</div>
-    <div class="product-meta">${p.description}</div>
-    <div class="product-meta">Цвет: ${p.color || '—'} • Размер: ${p.size || '—'}</div>
-    <div class="product-price">${(p.price || 0).toLocaleString('ru-RU')} ₽</div>
-    <div class="availability ${getAvClass(p.availability)}">${p.availability || '—'}</div>
-  </div>
-`;
   }
 
   // === СБРОС ФИЛЬТРОВ ===
@@ -304,22 +319,49 @@ const card = `
     document.getElementById('brandFilter').value = '';
     document.getElementById('categoryFilter').value = '';
     document.getElementById('availabilityFilter').value = '';
+    document.getElementById('weightFilter').value = '';
+    document.getElementById('helmetSizeFilter').value = '';
     renderProducts(allProducts);
   }
 
   // === ЗАГРУЗКА JSON ===
   fetch('products.json')
-    .then(r => r.json())
+    .then(response => {
+      if (!response.ok) throw new Error('Файл products.json не найден');
+      return response.json();
+    })
     .then(products => {
-      allProducts = products.map(p => ({
-        ...p,
-        name: p.name || p.description?.split('.')[0] || 'Товар'
-      }));
-      renderProducts(allProducts);
+      allProducts = products.map(p => {
+        let weight = '';
+        let size_category = '';
+
+        const size = (p.size || '').toLowerCase();
+        const desc = (p.description || '').toLowerCase();
+        const category = getCategory(p.description);
+
+        if (category === 'Перчатки' && (size.includes('унций') || size.includes('oz'))) {
+          weight = p.size;
+        }
+
+        if (category === 'Шлемы') {
+          size_category = p.size;
+        }
+
+        return {
+          ...p,
+          name: p.name || p.description?.split('.')[0] || 'Товар',
+          weight,
+          size_category
+        };
+      });
+
+      renderProducts();
     })
     .catch(err => {
-      console.error('Ошибка:', err);
-      document.getElementById('productGrid').innerHTML = `<p style="color:red">❌ Не удалось загрузить каталог.</p>`;
+      console.error('Ошибка загрузки:', err);
+      document.getElementById('productGrid').innerHTML = `
+        <p style="color: red;">❌ Ошибка: не удалось загрузить каталог. Убедитесь, что файл <code>products.json</code> лежит в корне.</p>
+      `;
     });
 
   // === ИНИЦИАЛИЗАЦИЯ ===
@@ -327,25 +369,11 @@ const card = `
     document.getElementById('brandFilter').addEventListener('change', applyFilters);
     document.getElementById('categoryFilter').addEventListener('change', applyFilters);
     document.getElementById('availabilityFilter').addEventListener('change', applyFilters);
-    
-    // Добавляем кнопку сброса (если её ещё нет)
-    if (!document.getElementById('resetFiltersBtn')) {
-      const resetBtn = document.createElement('button');
-      resetBtn.id = 'resetFiltersBtn';
-      resetBtn.textContent = 'Сбросить фильтры';
-      resetBtn.style.cssText = `
-        margin-top: 1rem;
-        padding: 0.5rem 1rem;
-        background: #d4af37;
-        color: #000;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-      `;
-      resetBtn.onclick = resetFilters;
-      document.querySelector('.filters').after(resetBtn);
-    }
+    document.getElementById('weightFilter').addEventListener('change', applyFilters);
+    document.getElementById('helmetSizeFilter').addEventListener('change', applyFilters);
+    document.getElementById('resetBtn').onclick = resetFilters;
   });
 </script>
+
 </body>
 </html>
