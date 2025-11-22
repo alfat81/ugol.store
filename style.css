@@ -116,6 +116,14 @@ header {
   color: var(--gray);
   margin: 0.3rem 0;
 }
+.product-img {
+  width: 100%;
+  height: 200px;
+  object-fit: contain;
+  background: #1a1a1a;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+}
 .product-price {
   font-weight: bold;
   color: var(--gold);
@@ -140,6 +148,7 @@ footer {
   color: #ccc;
   border-top: 1px solid #333;
 }
+
 
 
 
