@@ -281,7 +281,15 @@
           <div class="product-title">${p.name}</div>
           <div class="product-meta">${p.description}</div>
           <div class="product-meta">Цвет: ${p.color || '—'} • Размер: ${p.size || '—'}</div>
-          <div class="product-price">${(p.price || 0).toLocaleString('ru-RU')} ₽</div>
+          <div class="product-price">
+  ${p.oldPrice ? `
+    <span class="old-price">${p.oldPrice.toLocaleString('ru-RU')} ₽</span>
+    <br>
+    <span class="new-price">${p.price.toLocaleString('ru-RU')} ₽</span>
+  ` : `
+    <span class="new-price">${p.price.toLocaleString('ru-RU')} ₽</span>
+  `}
+</div>
           <div class="availability ${getAvClass(p.availability)}">${p.availability || '—'}</div>
         </div>
       `;
