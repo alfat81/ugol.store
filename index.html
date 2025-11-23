@@ -30,44 +30,46 @@
       margin: 0 auto;
       padding: 0 1rem;
     }
+    /* ШАПКА С ФОНОМ */
     header {
-      background-color: var(--surface);
-      padding: 1.5rem 0;
-      border-bottom: 1px solid #333;
+      background-image: url('assets/default.png');
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+      padding: 2rem 0;
       text-align: center;
+      position: relative;
     }
-    .logo {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.5rem;
+    .header-content {
+      position: relative;
+      z-index: 2;
+      color: white;
     }
-    .logo img {
-      height: 350px;
-    }
-    .logo h1 {
-      font-size: 1.8rem;
+    .header-content h1 {
+      font-size: 2.2rem;
       font-weight: bold;
       color: var(--gold);
       margin: 0;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
     }
     .tagline {
-      font-size: 0.95rem;
-      color: #aaa;
-      margin: 0.3rem 0 0;
+      font-size: 1.1rem;
+      color: #ddd;
+      margin: 0.5rem 0 1.5rem;
       font-style: italic;
     }
     .contacts {
+      font-size: 1rem;
       margin-top: 1rem;
-      font-size: 0.95rem;
     }
     .contacts a {
-      color: var(--text);
+      color: white;
       text-decoration: none;
     }
     .contacts a:hover {
       color: var(--gold);
     }
+    /* ФИЛЬТРЫ */
     .filters {
       display: flex;
       gap: 1rem;
@@ -94,6 +96,7 @@
       cursor: pointer;
       font-weight: bold;
     }
+    /* ТОВАРЫ */
     .product-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -129,22 +132,21 @@
       color: var(--gray);
       margin: 0.3rem 0;
     }
+    /* ЦЕНЫ */
     .product-price {
-      font-weight: bold;
-      color: var(--gold);
-      font-size: 1.2rem;
       margin: 0.5rem 0;
     }
     .old-price {
-  text-decoration: line-through;
-  color: #aaa;
-  font-size: 1rem;
-}
-.new-price {
-  color: var(--gold);
-  font-weight: bold;
-  font-size: 1.2rem;
-}
+      text-decoration: line-through;
+      color: #aaa;
+      font-size: 1rem;
+    }
+    .new-price {
+      color: var(--gold);
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    /* НАЛИЧИЕ */
     .availability {
       font-size: 0.9rem;
       margin-top: 0.5rem;
@@ -152,6 +154,7 @@
     .availability.in-stock { color: #4caf50; }
     .availability.out-of-stock { color: #e63946; }
     .availability.coming-soon { color: #ff9800; }
+    /* ПОДВАЛ */
     footer {
       background: var(--surface);
       padding: 2rem 0;
@@ -165,7 +168,7 @@
 </head>
 <body>
 
-<header class="container header-with-bg">
+<header class="container">
   <div class="header-content">
     <h1>УГОЛ ЧЕМПИОНОВ</h1>
     <p class="tagline">Магазин экипировки для бокса и единоборств</p>
@@ -206,14 +209,8 @@
       <option value="18 унций">18 унций</option>
     </select>
 
-    <select id="helmetSizeFilter">
-      <option value="">Все размеры шлемов</option>
-      <option value="S">S</option>
-      <option value="M">M</option>
-      <option value="L">L</option>
-      <option value="XL">XL</option>
-      <option value="S/M">S/M</option>
-      <option value="L/XL">L/XL</option>
+    <select id="sizeFilter">
+      <option value="">Все размеры</option>
     </select>
   </div>
 
@@ -233,7 +230,7 @@
 </footer>
 
 <script>
-  // === КАТЕГОРИИ ПО ОПИСАНИЮ ===
+  // === ОПРЕДЕЛЕНИЕ КАТЕГОРИЙ ===
   const CATEGORIES = {
     перчатки: 'Перчатки',
     шлем: 'Шлемы',
@@ -271,7 +268,19 @@
       return;
     }
 
-    const categories = new Set(list.map(p => getCategory(p.description)));
+    const categories = new Set();
+    const sizes = new Set();
+
+    list.forEach(p => {
+      const cat = getCategory(p.description);
+      categories.add(cat);
+      // Размеры ТОЛЬКО для не-перчаток
+      if (cat !== 'Перчатки' && p.size) {
+        sizes.add(p.size);
+      }
+    });
+
+    // Категории
     const catSelect = document.getElementById('categoryFilter');
     catSelect.innerHTML = '<option value="">Все категории</option>';
     [...categories].sort().forEach(cat => {
@@ -281,24 +290,33 @@
       catSelect.appendChild(opt);
     });
 
+    // Размеры (без перчаток)
+    const sizeSelect = document.getElementById('sizeFilter');
+    sizeSelect.innerHTML = '<option value="">Все размеры</option>';
+    [...sizes].sort().forEach(size => {
+      const opt = document.createElement('option');
+      opt.value = size;
+      opt.textContent = size;
+      sizeSelect.appendChild(opt);
+    });
+
+    // Карточки
     grid.innerHTML = list.map(p => {
       const imgPath = p.sku ? `assets/images/${p.sku}.png` : 'assets/icons/default.svg';
       return `
         <div class="product-card">
           <img src="${imgPath}" alt="${p.name}" class="product-img" onerror="this.src='assets/icons/default.svg'">
-          <div class="product-brand">${p.brand || ''}</div>
           <div class="product-title">${p.name}</div>
           <div class="product-meta">${p.description}</div>
           <div class="product-meta">Цвет: ${p.color || '—'} • Размер: ${p.size || '—'}</div>
           <div class="product-price">
-  ${p.oldPrice ? `
-    <span class="old-price">${p.oldPrice.toLocaleString('ru-RU')} ₽</span>
-    <br>
-    <span class="new-price">${p.price.toLocaleString('ru-RU')} ₽</span>
-  ` : `
-    <span class="new-price">${p.price.toLocaleString('ru-RU')} ₽</span>
-  `}
-</div>
+            ${p.oldPrice ? `
+              <span class="old-price">${p.oldPrice.toLocaleString('ru-RU')} ₽</span><br>
+              <span class="new-price">${p.price.toLocaleString('ru-RU')} ₽</span>
+            ` : `
+              <span class="new-price">${p.price.toLocaleString('ru-RU')} ₽</span>
+            `}
+          </div>
           <div class="availability ${getAvClass(p.availability)}">${p.availability || '—'}</div>
         </div>
       `;
@@ -318,26 +336,29 @@
     const category = document.getElementById('categoryFilter').value;
     const availability = document.getElementById('availabilityFilter').value;
     const weight = document.getElementById('weightFilter').value;
-    const helmetSize = document.getElementById('helmetSizeFilter').value;
+    const sizeValue = document.getElementById('sizeFilter').value;
 
-    const filtered = allProducts.filter(p =>
-      (brand === '' || (p.brand || '').includes(brand)) &&
-      (category === '' || getCategory(p.description) === category) &&
-      (availability === '' || (p.availability || '').includes(availability)) &&
-      (weight === '' || p.weight === weight) &&
-      (helmetSize === '' || p.size_category === helmetSize)
-    );
+    const filtered = allProducts.filter(p => {
+      const cat = getCategory(p.description);
+      return (
+        (brand === '' || (p.brand || '').includes(brand)) &&
+        (category === '' || cat === category) &&
+        (availability === '' || (p.availability || '').includes(availability)) &&
+        (weight === '' || p.weight === weight) &&
+        (sizeValue === '' || (cat !== 'Перчатки' && p.size === sizeValue))
+      );
+    });
 
     renderProducts(filtered);
   }
 
-  // === СБРОС ФИЛЬТРОВ ===
+  // === СБРОС ===
   function resetFilters() {
     document.getElementById('brandFilter').value = '';
     document.getElementById('categoryFilter').value = '';
     document.getElementById('availabilityFilter').value = '';
     document.getElementById('weightFilter').value = '';
-    document.getElementById('helmetSizeFilter').value = '';
+    document.getElementById('sizeFilter').value = '';
     renderProducts(allProducts);
   }
 
@@ -348,29 +369,26 @@
       return response.json();
     })
     .then(products => {
-      allProducts = products.map(p => {
-        let weight = '';
-        let size_category = '';
+      // Фильтруем скрытые товары и дополняем поля
+      allProducts = products
+        .filter(p => !p.hidden)
+        .map(p => {
+          let weight = '';
+          const size = (p.size || '').toLowerCase();
+          const desc = (p.description || '').toLowerCase();
+          const category = getCategory(p.description);
 
-        const size = (p.size || '').toLowerCase();
-        const desc = (p.description || '').toLowerCase();
-        const category = getCategory(p.description);
+          if (category === 'Перчатки' && (size.includes('унций') || size.includes('oz'))) {
+            weight = p.size;
+          }
 
-        if (category === 'Перчатки' && (size.includes('унций') || size.includes('oz'))) {
-          weight = p.size;
-        }
-
-        if (category === 'Шлемы') {
-          size_category = p.size;
-        }
-
-        return {
-          ...p,
-          name: p.name || p.description?.split('.')[0] || 'Товар',
-          weight,
-          size_category
-        };
-      });
+          return {
+            ...p,
+            name: p.name || p.description?.split('.')[0] || 'Товар',
+            weight,
+            size_category: p.size
+          };
+        });
 
       renderProducts();
     })
@@ -387,7 +405,7 @@
     document.getElementById('categoryFilter').addEventListener('change', applyFilters);
     document.getElementById('availabilityFilter').addEventListener('change', applyFilters);
     document.getElementById('weightFilter').addEventListener('change', applyFilters);
-    document.getElementById('helmetSizeFilter').addEventListener('change', applyFilters);
+    document.getElementById('sizeFilter').addEventListener('change', applyFilters);
     document.getElementById('resetBtn').onclick = resetFilters;
   });
 </script>
