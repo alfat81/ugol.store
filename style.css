@@ -30,7 +30,7 @@ body {
 /* === ШАПКА С ФОНОМ === */
 header {
   background-image: url('assets/default.png');
-  background-size: contain;
+  background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   padding: 2rem 0;
@@ -165,3 +165,4 @@ footer {
   color: #ccc;
   border-top: 1px solid #333;
 }
+
