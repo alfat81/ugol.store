@@ -31,53 +31,57 @@
       padding: 0 1rem;
     }
     /* ШАПКА С ФОНОМ */
-  header {
-  background-image: url('assets/default.png');
-  background-size: auto 100%;       /* сохраняет пропорции, растягивает по высоте */
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 350px;                    /* фиксированная высота — регулируйте по вкусу */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  margin: 0;
-  padding: 0;
-}
-
-.header-content {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-  color: white;
-}
-
-.header-content h1 {
-  font-size: 2.2rem;
-  font-weight: bold;
-  color: var(--gold);
-  margin: 0;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-}
-
-.tagline {
-  font-size: 1.1rem;
-  color: #ddd;
-  margin: 0.5rem 0 0;
-  font-style: italic;
-}
-
-.contacts {
-  font-size: 1rem;
-  margin-top: 1rem;
-}
-.contacts a {
-  color: white;
-  text-decoration: none;
-}
-.contacts a:hover {
-  color: var(--gold);
-}
+    header {
+      background-image: url('assets/default.png');
+      background-size: auto 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin: 0;
+      padding: 0;
+    }
+    .header-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      color: white;
+    }
+    .header-content h1 {
+      font-size: 2.2rem;
+      font-weight: bold;
+      color: var(--gold);
+      margin: 0;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+    .tagline {
+      font-size: 1.1rem;
+      color: #ddd;
+      margin: 0.5rem 0 0;
+      font-style: italic;
+    }
+    .contacts {
+      font-size: 1rem;
+      margin-top: 1rem;
+    }
+    .contacts a {
+      color: white;
+      text-decoration: none;
+    }
+    .contacts a:hover {
+      color: var(--gold);
+    }
+    .telegram-link {
+      color: var(--gold);
+      text-decoration: underline;
+      margin-left: 0.5rem;
+    }
+    .telegram-link:hover {
+      color: #0088cc;
+    }
     /* ФИЛЬТРЫ */
     .filters {
       display: flex;
@@ -173,32 +177,22 @@
       color: #ccc;
       border-top: 1px solid #333;
     }
-    .telegram-btn {
-  background: none;
-  border: none;
-  color: var(--gold);
-  cursor: pointer;
-  font-size: 0.95rem;
-  margin-left: 0.5rem;
-  padding: 0;
-  text-decoration: underline;
-}
-.telegram-btn:hover {
-  color: #0088cc; /* цвет Telegram */
-}
   </style>
 </head>
 <body>
 
 <header class="container">
-  <div class="contacts">
-  📞 
-  <a href="tel:+79696002585" id="phoneLink">+7 (969) 600-25-85</a>
-  <button id="telegramBtn" class="telegram-btn">✉️ в Telegram</button>
-  <br>
-  ✉️ 
-  <a href="mailto:ugol-chemp@yandex.ru">ugol-chemp@yandex.ru</a>
-</div>
+  <div class="header-content">
+    <h1>УГОЛ ЧЕМПИОНОВ</h1>
+    <p class="tagline">Магазин экипировки для бокса и единоборств</p>
+    <div class="contacts">
+      📞 
+      <a href="tel:+79696002585">+7 (969) 600-25-85</a>
+      <a href="https://t.me/ugol_chemp" class="telegram-link">✉️ в Telegram</a>
+      <br>
+      ✉️ 
+      <a href="mailto:ugol-chemp@yandex.ru">ugol-chemp@yandex.ru</a>
+    </div>
   </div>
 </header>
 
@@ -297,13 +291,11 @@
     list.forEach(p => {
       const cat = getCategory(p.description);
       categories.add(cat);
-      // Размеры ТОЛЬКО для не-перчаток
       if (cat !== 'Перчатки' && p.size) {
         sizes.add(p.size);
       }
     });
 
-    // Категории
     const catSelect = document.getElementById('categoryFilter');
     catSelect.innerHTML = '<option value="">Все категории</option>';
     [...categories].sort().forEach(cat => {
@@ -313,7 +305,6 @@
       catSelect.appendChild(opt);
     });
 
-    // Размеры (без перчаток)
     const sizeSelect = document.getElementById('sizeFilter');
     sizeSelect.innerHTML = '<option value="">Все размеры</option>';
     [...sizes].sort().forEach(size => {
@@ -323,7 +314,6 @@
       sizeSelect.appendChild(opt);
     });
 
-    // Карточки
     grid.innerHTML = list.map(p => {
       const imgPath = p.sku ? `assets/images/${p.sku}.png` : 'assets/icons/default.svg';
       return `
@@ -392,7 +382,6 @@
       return response.json();
     })
     .then(products => {
-      // Фильтруем скрытые товары и дополняем поля
       allProducts = products
         .filter(p => !p.hidden)
         .map(p => {
@@ -431,16 +420,6 @@
     document.getElementById('sizeFilter').addEventListener('change', applyFilters);
     document.getElementById('resetBtn').onclick = resetFilters;
   });
-  // Открытие Telegram по номеру телефона
-document.getElementById('telegramBtn').addEventListener('click', () => {
-  // Убираем все символы, кроме цифр и +
-  const phone = '+79696002585';
-  const telegramUrl = `https://t.me/${phone}`;
-  window.open(telegramUrl, '_blank');
-});
-
-// Альтернатива: если вы хотите использовать username — замените на:
-// const telegramUrl = 'https://t.me/ваш_ник';
 </script>
 
 </body>
