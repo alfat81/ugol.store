@@ -30,74 +30,74 @@
       margin: 0 auto;
       padding: 0 1rem;
     }
-   /* ШАПКА С ФОНОМ */
-header {
-  background-image: url('assets/default.png');
-  background-size: contain;
-  background-position: top center;
-  background-repeat: no-repeat;
-  padding-top: max(env(safe-area-inset-top), 2rem);
-  padding-bottom: 2rem;
-  text-align: center;
-  position: relative;
-}
+    /* ШАПКА С ФОНОМ */
+    header {
+      background-image: url('assets/default.png');
+      background-size: contain;
+      background-position: top center;
+      background-repeat: no-repeat;
+      padding-top: max(env(safe-area-inset-top), 2rem);
+      padding-bottom: 2rem;
+      text-align: center;
+      position: relative;
+    }
 
-.header-content h1 {
-  font-size: 2.2rem;
-  font-weight: bold;
-  color: var(--gold);
-  margin: 0;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-}
+    .header-content h1 {
+      font-size: 2.2rem;
+      font-weight: bold;
+      color: var(--gold);
+      margin: 0;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
 
-.tagline {
-  font-size: 1.1rem;
-  color: #ddd;
-  margin: 0.5rem 0 1rem;
-  font-style: italic;
-}
+    .tagline {
+      font-size: 1.1rem;
+      color: #ddd;
+      margin: 0.5rem 0 1rem;
+      font-style: italic;
+    }
 
-.contacts {
-  font-size: 1rem;
-  margin-top: 1rem;
-}
-.contacts a {
-  color: white;
-  text-decoration: none;
-}
-.contacts a:hover {
-  color: var(--gold);
-}
-.telegram-link {
-  color: var(--gold);
-  text-decoration: underline;
-  margin-left: 0.5rem;
-}
-.telegram-link:hover {
-  color: #0088cc;
-}
-   /* ФИЛЬТРЫ */
-.filters {
-  display: flex;
-  gap: 1rem;
-  margin: 2rem 0; /* увеличенный отступ сверху */
-  flex-wrap: wrap;
-  justify-content: center;
-}
-@media (max-width: 768px) {
-  .filters {
-    margin-top: 2.5rem; /* ещё больше отступа на мобильных */
-  }
-}
-.filters select {
-  padding: 0.5rem;
-  background: #1e1e1e;
-  color: white;
-  border: 1px solid #444;
-  border-radius: 4px;
-  font-size: 1rem;
-  min-width: 140px; /* чуть уже для мобильных */
-}
+    .contacts {
+      font-size: 1rem;
+      margin-top: 1rem;
+    }
+    .contacts a {
+      color: white;
+      text-decoration: none;
+    }
+    .contacts a:hover {
+      color: var(--gold);
+    }
+    .telegram-link {
+      color: var(--gold);
+      text-decoration: underline;
+      margin-left: 0.5rem;
+    }
+    .telegram-link:hover {
+      color: #0088cc;
+    }
+    /* ФИЛЬТРЫ */
+    .filters {
+      display: flex;
+      gap: 1rem;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    @media (max-width: 768px) {
+      .filters {
+        margin-top: 2.5rem;
+      }
+    }
+    .filters select {
+      padding: 0.5rem;
+      background: #1e1e1e;
+      color: white;
+      border: 1px solid #444;
+      border-radius: 4px;
+      font-size: 1rem;
+      min-width: 140px;
+    }
     /* ТОВАРЫ */
     .product-grid {
       display: grid;
@@ -111,6 +111,12 @@ header {
       border-radius: 8px;
       padding: 1rem;
       transition: transform 0.2s;
+      position: relative;
+    }
+    .product-card.active {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.3);
+      z-index: 10;
     }
     .product-card:hover {
       border-color: var(--gold);
@@ -147,6 +153,31 @@ header {
       color: var(--gold);
       font-weight: bold;
       font-size: 1.2rem;
+    }
+    /* КНОПКИ СВЯЗИ */
+    .contact-buttons {
+      display: none;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #333;
+    }
+    .contact-buttons.show {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    .contact-buttons a {
+      display: inline-block;
+      padding: 0.4rem 0.8rem;
+      background: var(--gold);
+      color: #000;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+    .contact-buttons a:hover {
+      opacity: 0.9;
     }
     /* НАЛИЧИЕ */
     .availability {
@@ -306,7 +337,7 @@ header {
     grid.innerHTML = list.map(p => {
       const imgPath = p.sku ? `assets/images/${p.sku}.png` : 'assets/icons/default.svg';
       return `
-        <div class="product-card">
+        <div class="product-card" data-sku="${p.sku || ''}">
           <img src="${imgPath}" alt="${p.name}" class="product-img" onerror="this.src='assets/icons/default.svg'">
           <div class="product-title">${p.name}</div>
           <div class="product-meta">${p.description}</div>
@@ -320,6 +351,10 @@ header {
             `}
           </div>
           <div class="availability ${getAvClass(p.availability)}">${p.availability || '—'}</div>
+          <div class="contact-buttons">
+            <a href="tel:+79696002585">📞 Позвонить</a>
+            <a href="https://t.me/ugol_chemp">✉️ Написать</a>
+          </div>
         </div>
       `;
     }).join('');
@@ -392,6 +427,27 @@ header {
         });
 
       renderProducts();
+
+      // Активация карточки из URL при загрузке
+      setTimeout(() => {
+        const hash = window.location.hash.substring(1);
+        if (hash) {
+          const card = document.querySelector(`.product-card[data-sku="${hash}"]`);
+          if (card) {
+            // Снять выделение со всех
+            document.querySelectorAll('.product-card').forEach(c => {
+              c.classList.remove('active');
+              c.querySelector('.contact-buttons')?.classList.remove('show');
+            });
+            // Выделить текущую
+            card.classList.add('active');
+            const buttons = card.querySelector('.contact-buttons');
+            if (buttons) buttons.classList.add('show');
+            // Прокрутка
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }
+      }, 300);
     })
     .catch(err => {
       console.error('Ошибка загрузки:', err);
@@ -408,6 +464,29 @@ header {
     document.getElementById('weightFilter').addEventListener('change', applyFilters);
     document.getElementById('sizeFilter').addEventListener('change', applyFilters);
     document.getElementById('resetBtn').onclick = resetFilters;
+
+    // Обработка кликов по карточкам
+    document.addEventListener('click', function(e) {
+      const card = e.target.closest('.product-card');
+      if (!card) return;
+
+      // Убираем выделение со всех
+      document.querySelectorAll('.product-card').forEach(c => {
+        c.classList.remove('active');
+        c.querySelector('.contact-buttons')?.classList.remove('show');
+      });
+
+      // Выделяем текущую
+      card.classList.add('active');
+      const buttons = card.querySelector('.contact-buttons');
+      if (buttons) buttons.classList.add('show');
+
+      // Устанавливаем якорь в URL
+      const sku = card.dataset.sku;
+      if (sku) {
+        history.pushState(null, null, `#${sku}`);
+      }
+    });
   });
 </script>
 
