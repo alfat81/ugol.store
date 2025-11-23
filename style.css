@@ -33,6 +33,48 @@ header {
   padding: 1.5rem 0;
   border-bottom: 1px solid #333;
 }
+.header-with-bg {
+  background-image: url('assets/default.png');
+  background-size: contain;     /* или cover, если нужно заполнить */
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 2rem 0;
+  text-align: center;
+  position: relative;
+}
+
+.header-content {
+  position: relative;
+  z-index: 2;
+  color: white; /* чтобы текст был читаем */
+}
+
+.header-content h1 {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: var(--gold);
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5); /* улучшает читаемость */
+}
+
+.tagline {
+  font-size: 1.1rem;
+  color: #ddd;
+  margin: 0.5rem 0 1.5rem;
+  font-style: italic;
+}
+
+.contacts {
+  font-size: 1rem;
+  margin-top: 1rem;
+}
+.contacts a {
+  color: white;
+  text-decoration: none;
+}
+.contacts a:hover {
+  color: var(--gold);
+}
 .logo {
   display: flex;
   align-items: center;
@@ -158,6 +200,7 @@ footer {
   color: #ccc;
   border-top: 1px solid #333;
 }
+
 
 
 
