@@ -31,8 +31,7 @@
       padding: 0 1rem;
     }
     /* ШАПКА С ФОНОМ */
-   /* ШАПКА */
-header {
+  header {
   background-image: url('assets/default.png');
   background-size: auto 100%;       /* сохраняет пропорции, растягивает по высоте */
   background-position: center;
@@ -174,18 +173,32 @@ header {
       color: #ccc;
       border-top: 1px solid #333;
     }
+    .telegram-btn {
+  background: none;
+  border: none;
+  color: var(--gold);
+  cursor: pointer;
+  font-size: 0.95rem;
+  margin-left: 0.5rem;
+  padding: 0;
+  text-decoration: underline;
+}
+.telegram-btn:hover {
+  color: #0088cc; /* цвет Telegram */
+}
   </style>
 </head>
 <body>
 
 <header class="container">
-  <div class="header-content">
-    <h1>УГОЛ ЧЕМПИОНОВ</h1>
-    <p class="tagline">Магазин экипировки для бокса и единоборств</p>
-    <div class="contacts">
-      📞 <a href="tel:+79696002585">+7 (969) 600-25-85</a> |
-      ✉️ <a href="mailto:ugol-chemp@yandex.ru">ugol-chemp@yandex.ru</a>
-    </div>
+  <div class="contacts">
+  📞 
+  <a href="tel:+79696002585" id="phoneLink">+7 (969) 600-25-85</a>
+  <button id="telegramBtn" class="telegram-btn">✉️ в Telegram</button>
+  <br>
+  ✉️ 
+  <a href="mailto:ugol-chemp@yandex.ru">ugol-chemp@yandex.ru</a>
+</div>
   </div>
 </header>
 
@@ -418,6 +431,16 @@ header {
     document.getElementById('sizeFilter').addEventListener('change', applyFilters);
     document.getElementById('resetBtn').onclick = resetFilters;
   });
+  // Открытие Telegram по номеру телефона
+document.getElementById('telegramBtn').addEventListener('click', () => {
+  // Убираем все символы, кроме цифр и +
+  const phone = '+79696002585';
+  const telegramUrl = `https://t.me/${phone}`;
+  window.open(telegramUrl, '_blank');
+});
+
+// Альтернатива: если вы хотите использовать username — замените на:
+// const telegramUrl = 'https://t.me/ваш_ник';
 </script>
 
 </body>
