@@ -29,9 +29,9 @@ body {
 
 /* Шапка */
 header {
-  /background-color: var(--surface);
-  /padding: 1.5rem 0;
-  /border-bottom: 1px solid #333;
+  /*background-color: var(--surface);*/
+  /*padding: 1.5rem 0;*/
+  /*border-bottom: 1px solid #333;*/
 }
 .header-with-bg {
   background-image: url('assets/default.png');
@@ -200,6 +200,7 @@ footer {
   color: #ccc;
   border-top: 1px solid #333;
 }
+
 
 
 
