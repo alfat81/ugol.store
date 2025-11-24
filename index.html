@@ -218,14 +218,18 @@
 
 <main class="container">
   <div class="filters">
+    <select id="categoryFilter">
+      <option value="">Все категории</option>
+    </select>
+
     <select id="brandFilter">
       <option value="">Все бренды</option>
       <option value="CLINCH">CLINCH</option>
       <option value="adidas">adidas</option>
     </select>
 
-    <select id="categoryFilter">
-      <option value="">Все категории</option>
+    <select id="sizeOrWeightFilter">
+      <option value="">Все размеры и веса</option>
     </select>
 
     <select id="availabilityFilter">
@@ -235,19 +239,6 @@
       <option value="ПОСТУПЛЕНИЕ В ДЕКАБРЕ">Поступление в декабре</option>
       <option value="ПОСТУПЛЕНИЕ В КОНЦЕ ДЕКАБРЯ">Поступление в конце декабря</option>
       <option value="В НАЛИЧИИ НОВОЕ ПОСТУПЛЕНИЕ">Новое поступление</option>
-    </select>
-
-    <select id="weightFilter">
-      <option value="">Все веса перчаток</option>
-      <option value="10 унций">10 унций</option>
-      <option value="12 унций">12 унций</option>
-      <option value="14 унций">14 унций</option>
-      <option value="16 унций">16 унций</option>
-      <option value="18 унций">18 унций</option>
-    </select>
-
-    <select id="sizeFilter">
-      <option value="">Все размеры</option>
     </select>
   </div>
 
@@ -306,33 +297,37 @@
     }
 
     const categories = new Set();
-    const sizes = new Set();
+    const brands = new Set();
 
     list.forEach(p => {
       const cat = getCategory(p.description);
       categories.add(cat);
-      if (cat !== 'Перчатки' && p.size) {
-        sizes.add(p.size);
-      }
+      if (p.brand) brands.add(p.brand);
     });
 
+    // Категории
     const catSelect = document.getElementById('categoryFilter');
     catSelect.innerHTML = '<option value="">Все категории</option>';
     [...categories].sort().forEach(cat => {
-      const opt = document.createElement('option');
-      opt.value = cat;
-      opt.textContent = cat;
-      catSelect.appendChild(opt);
+      if (cat && cat !== 'Разное') {
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = cat;
+        catSelect.appendChild(opt);
+      }
     });
 
-    const sizeSelect = document.getElementById('sizeFilter');
-    sizeSelect.innerHTML = '<option value="">Все размеры</option>';
-    [...sizes].sort().forEach(size => {
+    // Бренды
+    const brandSelect = document.getElementById('brandFilter');
+    const brandOpts = [...brands].sort();
+    brandOpts.forEach(brand => {
       const opt = document.createElement('option');
-      opt.value = size;
-      opt.textContent = size;
-      sizeSelect.appendChild(opt);
+      opt.value = brand;
+      opt.textContent = brand;
+      brandSelect.appendChild(opt);
     });
+
+    // Размер/Вес заполняется при выборе категории
 
     grid.innerHTML = list.map(p => {
       const imgPath = p.sku ? `assets/images/${p.sku}.png` : 'assets/icons/default.svg';
@@ -367,23 +362,55 @@
     return 'out-of-stock';
   }
 
+  // === ОБНОВЛЕНИЕ ФИЛЬТРА РАЗМЕР/ВЕС ===
+  function updateSizeOrWeightFilter() {
+    const category = document.getElementById('categoryFilter').value;
+    const sizeOrWeightSelect = document.getElementById('sizeOrWeightFilter');
+    sizeOrWeightSelect.innerHTML = '<option value="">Все размеры и веса</option>';
+
+    const values = new Set();
+    allProducts.forEach(p => {
+      const cat = getCategory(p.description);
+      if (category === '' || cat === category) {
+        if (cat === 'Перчатки') {
+          if (p.weight) values.add(p.weight);
+        } else {
+          if (p.size) values.add(p.size);
+        }
+      }
+    });
+
+    [...values].sort().forEach(val => {
+      const opt = document.createElement('option');
+      opt.value = val;
+      opt.textContent = val;
+      sizeOrWeightSelect.appendChild(opt);
+    });
+  }
+
   // === ФИЛЬТРАЦИЯ ===
   function applyFilters() {
-    const brand = document.getElementById('brandFilter').value;
     const category = document.getElementById('categoryFilter').value;
+    const brand = document.getElementById('brandFilter').value;
+    const sizeOrWeight = document.getElementById('sizeOrWeightFilter').value;
     const availability = document.getElementById('availabilityFilter').value;
-    const weight = document.getElementById('weightFilter').value;
-    const sizeValue = document.getElementById('sizeFilter').value;
 
     const filtered = allProducts.filter(p => {
       const cat = getCategory(p.description);
-      return (
-        (brand === '' || (p.brand || '').includes(brand)) &&
-        (category === '' || cat === category) &&
-        (availability === '' || (p.availability || '').includes(availability)) &&
-        (weight === '' || p.weight === weight) &&
-        (sizeValue === '' || (cat !== 'Перчатки' && p.size === sizeValue))
-      );
+      const matchesCategory = category === '' || cat === category;
+      const matchesBrand = brand === '' || (p.brand || '').includes(brand);
+      const matchesAvailability = availability === '' || (p.availability || '').includes(availability);
+
+      let matchesSizeOrWeight = true;
+      if (sizeOrWeight !== '') {
+        if (cat === 'Перчатки') {
+          matchesSizeOrWeight = p.weight === sizeOrWeight;
+        } else {
+          matchesSizeOrWeight = p.size === sizeOrWeight;
+        }
+      }
+
+      return matchesCategory && matchesBrand && matchesAvailability && matchesSizeOrWeight;
     });
 
     renderProducts(filtered);
@@ -391,11 +418,10 @@
 
   // === СБРОС ===
   function resetFilters() {
-    document.getElementById('brandFilter').value = '';
     document.getElementById('categoryFilter').value = '';
+    document.getElementById('brandFilter').value = '';
+    document.getElementById('sizeOrWeightFilter').value = '';
     document.getElementById('availabilityFilter').value = '';
-    document.getElementById('weightFilter').value = '';
-    document.getElementById('sizeFilter').value = '';
     renderProducts(allProducts);
   }
 
@@ -427,23 +453,21 @@
         });
 
       renderProducts();
+      updateSizeOrWeightFilter();
 
-      // Активация карточки из URL при загрузке
+      // Активация карточки из URL
       setTimeout(() => {
         const hash = window.location.hash.substring(1);
         if (hash) {
           const card = document.querySelector(`.product-card[data-sku="${hash}"]`);
           if (card) {
-            // Снять выделение со всех
             document.querySelectorAll('.product-card').forEach(c => {
               c.classList.remove('active');
               c.querySelector('.contact-buttons')?.classList.remove('show');
             });
-            // Выделить текущую
             card.classList.add('active');
             const buttons = card.querySelector('.contact-buttons');
             if (buttons) buttons.classList.add('show');
-            // Прокрутка
             card.scrollIntoView({ behavior: 'smooth', block: 'center' });
           }
         }
@@ -452,17 +476,19 @@
     .catch(err => {
       console.error('Ошибка загрузки:', err);
       document.getElementById('productGrid').innerHTML = `
-        <p style="color: red;">❌ Ошибка: не удалось загрузить каталог. Убедитесь, что файл <code>products.json</code> лежит в корне.</p>
+        <p style="color: red;">❌ Ошибка: не удалось загрузить каталог.</p>
       `;
     });
 
   // === ИНИЦИАЛИЗАЦИЯ ===
   document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('categoryFilter').addEventListener('change', () => {
+      updateSizeOrWeightFilter();
+      applyFilters();
+    });
     document.getElementById('brandFilter').addEventListener('change', applyFilters);
-    document.getElementById('categoryFilter').addEventListener('change', applyFilters);
+    document.getElementById('sizeOrWeightFilter').addEventListener('change', applyFilters);
     document.getElementById('availabilityFilter').addEventListener('change', applyFilters);
-    document.getElementById('weightFilter').addEventListener('change', applyFilters);
-    document.getElementById('sizeFilter').addEventListener('change', applyFilters);
     document.getElementById('resetBtn').onclick = resetFilters;
 
     // Обработка кликов по карточкам
@@ -470,18 +496,15 @@
       const card = e.target.closest('.product-card');
       if (!card) return;
 
-      // Убираем выделение со всех
       document.querySelectorAll('.product-card').forEach(c => {
         c.classList.remove('active');
         c.querySelector('.contact-buttons')?.classList.remove('show');
       });
 
-      // Выделяем текущую
       card.classList.add('active');
       const buttons = card.querySelector('.contact-buttons');
       if (buttons) buttons.classList.add('show');
 
-      // Устанавливаем якорь в URL
       const sku = card.dataset.sku;
       if (sku) {
         history.pushState(null, null, `#${sku}`);
