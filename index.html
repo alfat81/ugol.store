@@ -53,6 +53,12 @@
     }
 
     /* ШАПКА */
+    .header-content {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 0;
+    }
     .header-content h1 {
       font-size: 2.2rem;
       font-weight: bold;
@@ -69,6 +75,10 @@
     .contacts {
       font-size: 1rem;
       margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      align-items: center;
     }
     .contacts a {
       color: white;
@@ -80,10 +90,7 @@
     .telegram-link {
       color: var(--gold);
       text-decoration: underline;
-      margin-left: 0.5rem;
-    }
-    .telegram-link:hover {
-      color: #0088cc;
+      margin-left: 0;
     }
 
     /* ФИЛЬТРЫ */
@@ -265,7 +272,238 @@
     </p>
   </footer>
 
-  <!-- ... остальной JavaScript (как в предыдущей версии) ... -->
+  <script>
+    // === КАТЕГОРИИ ===
+    const CATEGORIES = {
+      перчатки: 'Перчатки',
+      шлем: 'Шлемы',
+      защит: 'Защита',
+      лапы: 'Лапы и палки',
+      бинт: 'Бинты и тейпы',
+      обув: 'Обувь',
+      кимоно: 'Кимоно и одежда',
+      форма: 'Кимоно и одежда',
+      трико: 'Кимоно и одежда',
+      майка: 'Кимоно и одежда',
+      шорты: 'Кимоно и одежда',
+      пояс: 'Пояса',
+      кап: 'Защита',
+      мешок: 'Мешки и груши',
+      груша: 'Мешки и груши',
+      скакалк: 'Скакалки'
+    };
+
+    function getCategory(desc) {
+      const d = (desc || '').toLowerCase();
+      for (const [key, cat] of Object.entries(CATEGORIES)) {
+        if (d.includes(key)) return cat;
+      }
+      return 'Разное';
+    }
+
+    let allProducts = [];
+
+    // === РЕНДЕР ТОВАРОВ ===
+    function renderProducts(list = allProducts) {
+      const grid = document.getElementById('productGrid');
+      if (list.length === 0) {
+        grid.innerHTML = '<p>Товары не найдены</p>';
+        return;
+      }
+
+      const categories = new Set();
+      const brands = new Set();
+      const sizes = new Set();
+      const weights = new Set();
+
+      list.forEach(p => {
+        const cat = getCategory(p.description);
+        categories.add(cat);
+        brands.add(p.brand || '');
+        if (cat === 'Перчатки') {
+          if (p.weight) weights.add(p.weight);
+        } else {
+          if (p.size_category) sizes.add(p.size_category);
+        }
+      });
+
+      // Категории
+      const catSelect = document.getElementById('categoryFilter');
+      catSelect.innerHTML = '<option value="">Все категории</option>';
+      [...categories].sort().forEach(cat => {
+        if (cat && cat !== 'Разное') {
+          const opt = document.createElement('option');
+          opt.value = cat;
+          opt.textContent = cat;
+          catSelect.appendChild(opt);
+        }
+      });
+
+      // Бренды
+      const brandSelect = document.getElementById('brandFilter');
+      const brandOpts = [...brands].filter(b => b).sort();
+      brandOpts.forEach(brand => {
+        const opt = document.createElement('option');
+        opt.value = brand;
+        opt.textContent = brand;
+        brandSelect.appendChild(opt);
+      });
+
+      // Размер/Вес — заполняется при выборе категории
+
+      grid.innerHTML = list.map(p => {
+        const imgPath = p.sku ? `assets/images/${p.sku}.png` : 'assets/icons/default.svg';
+        const sizeDisplay = p.weight || p.size_category || p.size || '—';
+        return `
+          <div class="product-card" data-sku="${p.sku || ''}" data-url="https://ugol.store#${p.sku}">
+            <img src="${imgPath}" alt="${p.name}" class="product-img" onerror="this.src='assets/icons/default.svg'">
+            <div class="product-title">${p.name}</div>
+            <div class="product-meta">${p.description}</div>
+            <div class="product-meta">Цвет: ${p.color || '—'} • Размер: ${sizeDisplay}</div>
+            <div class="product-price">
+              ${p.oldPrice ? `
+                <span class="old-price">${p.oldPrice.toLocaleString('ru-RU')} ₽</span><br>
+                <span class="new-price">${p.price.toLocaleString('ru-RU')} ₽</span>
+              ` : `
+                <span class="new-price">${p.price.toLocaleString('ru-RU')} ₽</span>
+              `}
+            </div>
+            <div class="availability ${getAvClass(p.availability)}">${p.availability || '—'}</div>
+            <div class="contact-buttons">
+              <a href="tel:+79696002585">📞 Позвонить</a>
+              <a href="https://t.me/ugol_chemp_bot">✉️ Написать</a>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function getAvClass(av) {
+      if (!av) return '';
+      if (av.includes('В наличии')) return 'in-stock';
+      if (av.includes('ПОСТУПЛЕНИЕ')) return 'coming-soon';
+      return 'out-of-stock';
+    }
+
+    // === ОБНОВЛЕНИЕ ФИЛЬТРА РАЗМЕР/ВЕС ===
+    function updateSizeOrWeightFilter() {
+      const category = document.getElementById('categoryFilter').value;
+      const sizeOrWeightSelect = document.getElementById('sizeOrWeightFilter');
+      sizeOrWeightSelect.innerHTML = '<option value="">Все размеры и веса</option>';
+
+      const values = new Set();
+      allProducts.forEach(p => {
+        const cat = getCategory(p.description);
+        if (category === '' || cat === category) {
+          if (cat === 'Перчатки') {
+            if (p.weight) values.add(p.weight);
+          } else {
+            if (p.size_category) values.add(p.size_category);
+          }
+        }
+      });
+
+      [...values].sort().forEach(val => {
+        const opt = document.createElement('option');
+        opt.value = val;
+        opt.textContent = val;
+        sizeOrWeightSelect.appendChild(opt);
+      });
+    }
+
+    // === ФИЛЬТРАЦИЯ ===
+    function applyFilters() {
+      const category = document.getElementById('categoryFilter').value;
+      const brand = document.getElementById('brandFilter').value;
+      const sizeOrWeight = document.getElementById('sizeOrWeightFilter').value;
+      const availability = document.getElementById('availabilityFilter').value;
+
+      const filtered = allProducts.filter(p => {
+        const cat = getCategory(p.description);
+        const matchesCategory = category === '' || cat === category;
+        const matchesBrand = brand === '' || (p.brand || '').includes(brand);
+        const matchesAvailability = availability === '' || (p.availability || '').includes(availability);
+
+        let matchesSizeOrWeight = true;
+        if (sizeOrWeight !== '') {
+          if (cat === 'Перчатки') {
+            matchesSizeOrWeight = p.weight === sizeOrWeight;
+          } else {
+            matchesSizeOrWeight = p.size_category === sizeOrWeight;
+          }
+        }
+
+        return matchesCategory && matchesBrand && matchesAvailability && matchesSizeOrWeight;
+      });
+
+      renderProducts(filtered);
+    }
+
+    // === СБРОС ===
+    function resetFilters() {
+      document.getElementById('categoryFilter').value = '';
+      document.getElementById('brandFilter').value = '';
+      document.getElementById('sizeOrWeightFilter').value = '';
+      document.getElementById('availabilityFilter').value = '';
+      renderProducts(allProducts);
+    }
+
+    // === ЗАГРУЗКА КАТАЛОГА ===
+    fetch('products.json')
+      .then(response => {
+        if (!response.ok) throw new Error('404: products.json не найден');
+        return response.json();
+      })
+      .then(products => {
+        allProducts = products.filter(p => !p.hidden);
+        renderProducts();
+        updateSizeOrWeightFilter();
+        // Прокрутка к карточке из URL
+        setTimeout(() => {
+          const hash = window.location.hash.substring(1);
+          if (hash) {
+            const card = document.querySelector(`.product-card[data-sku="${hash}"]`);
+            if (card) {
+              card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          }
+        }, 300);
+      })
+      .catch(err => {
+        console.error('Ошибка загрузки:', err);
+        document.getElementById('productGrid').innerHTML = `
+          <p style="color: red; text-align: center;">
+            ❌ Не удалось загрузить каталог.<br>
+            Проверьте, что файл <code>products.json</code> лежит в корне сайта.
+          </p>
+        `;
+      });
+
+    // === ИНИЦИАЛИЗАЦИЯ ===
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('categoryFilter').addEventListener('change', () => {
+        updateSizeOrWeightFilter();
+        applyFilters();
+      });
+      document.getElementById('brandFilter').addEventListener('change', applyFilters);
+      document.getElementById('sizeOrWeightFilter').addEventListener('change', applyFilters);
+      document.getElementById('availabilityFilter').addEventListener('change', applyFilters);
+      document.getElementById('resetBtn').onclick = resetFilters;
+
+      // Обработка кликов по карточкам
+      document.addEventListener('click', function(e) {
+        const card = e.target.closest('.product-card');
+        if (!card) return;
+        document.querySelectorAll('.product-card').forEach(c => {
+          c.classList.remove('active');
+          c.querySelector('.contact-buttons')?.classList.remove('show');
+        });
+        card.classList.add('active');
+        const buttons = card.querySelector('.contact-buttons');
+        if (buttons) buttons.classList.add('show');
+      });
+    });
+  </script>
 
 </body>
 </html>
